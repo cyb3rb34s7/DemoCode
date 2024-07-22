@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yourpackage.mapper.MovieLicenseMapper">
+    <resultMap id="MovieLicenseMap" type="com.yourpackage.dto.MovieLicenseDTO">
+        <id property="movieId" column="movie_id"/>
+        <result property="mainTitle" column="main_title"/>
+        <result property="type" column="type"/>
+        <result property="providerName" column="provider_name"/>
+        <result property="currentReleaseDate" column="current_release_date"/>
+        <result property="currentExpiryDate" column="current_expiry_date"/>
+        <collection property="licenseHistory" ofType="com.yourpackage.dto.LicenseHistoryEntry">
+            <result property="releaseDate" column="hist_release_date"/>
+            <result property="expiryDate" column="hist_expiry_date"/>
+            <result property="status" column="hist_status"/>
+            <result property="changeDate" column="change_date"/>
+        </collection>
+    </resultMap>
+
+    <select id="getMovieLicenses" resultMap="MovieLicenseMap">
+        SELECT 
+            m.movie_id, m.main_title, m.type, p.provider_name,
+            m.release_date AS current_release_date,
+            m.expiry_date AS current_expiry_date,
+            lh.release_date AS hist_release_date,
+            lh.expiry_date AS hist_expiry_date,
+            lh.status AS hist_status,
+            lh.change_date
+        FROM 
+            movie m
+            JOIN provider p ON m.provider_id = p.provider_id
+            LEFT JOIN license_history lh ON m.movie_id = lh.movie_id
+        ORDER BY ${sortCol} ${sortOrder}
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <insert id="insertLicenseHistory" parameterType="com.yourpackage.dto.LicenseHistoryEntry">
+        INSERT INTO license_history (
+            movie_id, release_date, expiry_date, status, change_date
+        ) VALUES (
+            #{movieId}, #{releaseDate}, #{expiryDate}, #{status}, #{changeDate}
+        )
+    </insert>
+</mapper>
