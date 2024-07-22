@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yourpackage.mapper.MovieLicenseMapper">
+    <select id="getLicenseHistoryEntries" resultType="com.yourpackage.dto.LicenseHistoryEntry">
+        SELECT 
+            lh.movie_id, m.main_title, m.type, p.provider_name,
+            lh.release_date AS historicalReleaseDate,
+            lh.expiry_date AS historicalExpiryDate,
+            lh.status AS historicalStatus,
+            m.release_date AS currentReleaseDate,
+            m.expiry_date AS currentExpiryDate,
+            lh.change_date
+        FROM 
+            license_history lh
+            JOIN movie m ON lh.movie_id = m.movie_id
+            JOIN provider p ON m.provider_id = p.provider_id
+        ORDER BY ${sort}
+        LIMIT #{size} OFFSET (#{page} - 1) * #{size}
+    </select>
+
+    <insert id="insertLicenseHistory" parameterType="com.yourpackage.dto.LicenseHistoryEntry">
+        INSERT INTO license_history (
+            movie_id, release_date, expiry_date, status, change_date
+        ) VALUES (
+            #{movieId}, #{historicalReleaseDate}, #{historicalExpiryDate}, 
+            #{historicalStatus}, #{changeDate}
+        )
+    </insert>
+</mapper>
