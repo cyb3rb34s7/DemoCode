@@ -1,16 +1,17 @@
-.filter-sidebar-container {
-  position: fixed;  /* Change to fixed */
+.filter-sidebar-wrapper {
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
+  left: 100%;
   display: flex;
   justify-content: flex-end;
+  transition: left 0.3s ease-out;
   pointer-events: none;
-  z-index: 1000;  /* Add a high z-index */
 }
 
-.filter-sidebar-container.open {
+.filter-sidebar-wrapper.open {
+  left: 0;
   pointer-events: auto;
 }
 
@@ -28,14 +29,8 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.3s ease-out;
-  height: 100%;  /* Ensure full height */
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);  /* Add shadow for depth */
-}
-
-.filter-sidebar-container.open .filter-sidebar {
-  transform: translateX(0);
+  height: 100%;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .filter-sidebar-header {
@@ -72,6 +67,6 @@ mat-checkbox {
 }
 
 /* Ensure datepicker appears above sidebar */
-.cdk-overlay-container {
-  z-index: 1500 !important;
+::ng-deep .cdk-overlay-container {
+  z-index: 1000;
 }
