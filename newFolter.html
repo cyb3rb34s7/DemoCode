@@ -1,0 +1,48 @@
+<div class="filter-sidebar-container" [class.open]="isOpen">
+  <div class="filter-sidebar-backdrop" (click)="close()" *ngIf="isOpen"></div>
+  <div class="filter-sidebar">
+    <div class="filter-sidebar-header">
+      <h2>Filters</h2>
+      <button mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="filter-sidebar-content">
+      <mat-accordion>
+        <!-- Date Range Filter -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Date Range</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-label>From</mat-label>
+            <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="dateRange.from" (ngModelChange)="updateDateRange()">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>To</mat-label>
+            <input matInput [matDatepicker]="pickerTo" [(ngModel)]="dateRange.to" (ngModelChange)="updateDateRange()">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <!-- Other Filters -->
+        <mat-expansion-panel *ngFor="let category of allFiltersList | keyvalue">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ category.key }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-checkbox *ngFor="let option of category.value"
+                        [checked]="isSelected(category.key, option)"
+                        (change)="updateFilter(category.key, option, $event.checked)">
+            {{ option }}
+          </mat-checkbox>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="filter-sidebar-footer">
+      <button mat-raised-button color="primary" class="apply-button" (click)="applyFilters()">Apply Filters</button>
+    </div>
+  </div>
+</div>
