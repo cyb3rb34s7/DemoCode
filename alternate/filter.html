@@ -1,0 +1,23 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav class="sidenav" [mode]="'side'" [opened]="true">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Date Filters
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-form-field>
+        <mat-label>From Date</mat-label>
+        <input matInput [matDatepicker]="picker1" formControlName="fromDate">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>To Date</mat-label>
+        <input matInput [matDatepicker]="picker2" formControlName="toDate">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+    </mat-expansion-panel>
+  </mat-sidenav>
+</mat-sidenav-container>
